@@ -1,13 +1,10 @@
-import React, {Fragment} from 'react';
-import logo from './logo.svg';
-import CheckerBoard from './CheckerBoard'
+import React from 'react';
 import './App.css';
-//this is in early versions
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // Don't call this.setState() here!
+
     this.state = {
       tableRows: [],
       activeCell:{},
@@ -21,9 +18,7 @@ class App extends React.Component {
 
   componentDidMount() {
     const buildTable = [];
-    let count =0
     for (let x = 0; x < 8; x++) {
-
       for (let y = 0; y < 8; y++) {
         if(x %2 === 0 && y %2 === 0){
             buildTable.push({
