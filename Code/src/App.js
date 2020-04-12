@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {Fragment} from 'react';
+import logo from './logo.svg';
+import CheckerBoard from './CheckerBoard'
 import './App.css';
+//this is in early versions
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-
+    // Don't call this.setState() here!
     this.state = {
       tableRows: [],
       activeCell:{},
@@ -14,11 +17,74 @@ class App extends React.Component {
     this.highlightThisCell = this.highlightThisCell.bind(this)
     this.clearHighlightedCells = this.clearHighlightedCells.bind(this);
     this.movePeice = this.movePeice.bind(this);
+    this.newMovePeice = this.newMovePeice.bind(this);
+    this.ComputerMakeMove=this.ComputerMakeMove.bind(this);
    }
+
+
+
+  ComputerMakeMove(){
+    let validMove=false;
+    const pieceToMove = this.state.tableRows.find((origin)=>{
+
+    if(origin.peicePresent === 'redPeice'){
+
+      let rightMove = this.state.tableRows.find(cell => cell.xPosition === (origin.xPosition +1) && cell.yPosition === (origin.yPosition +1));
+      let leftMove = this.state.tableRows.find(cell => cell.xPosition === (origin.xPosition +1) && cell.yPosition === (origin.yPosition -1));
+
+
+      if(leftMove && leftMove.peicePresent ===false){
+        validMove=leftMove;
+      }else if (rightMove&& rightMove.peicePresent === false){
+        validMove=rightMove;
+      }
+
+    }
+    if(validMove){
+      return origin;
+    }
+    })
+
+  setTimeout(()=>{this.newMovePeice(pieceToMove,validMove)}, 1000)
+
+
+  }
+
+  newMovePeice(orginalLocation, newLocation){
+
+    const copyOfOriginalTableState = [...this.state.tableRows]
+
+    const indexOfOriginalLocation = copyOfOriginalTableState.findIndex(cell => cell.xPosition=== orginalLocation.xPosition && cell.yPosition === orginalLocation.yPosition);
+    const indexOfNewLocation = copyOfOriginalTableState.findIndex(cell => cell.xPosition === newLocation.xPosition && cell.yPosition === newLocation.yPosition);
+
+    const newOriginLocation = {...copyOfOriginalTableState[indexOfOriginalLocation]};
+    newOriginLocation.peicePresent=false;
+    newOriginLocation.element =<div className={orginalLocation.element.props.className}></div>
+
+
+    const newLocationLocation = {...copyOfOriginalTableState[indexOfNewLocation]};
+    newLocationLocation.peicePresent= orginalLocation.peicePresent;
+
+
+    newLocationLocation.element=<div className={newLocation.element.props.className} ><span className={orginalLocation.peicePresent}></span></div>
+
+
+    copyOfOriginalTableState.splice(indexOfOriginalLocation,1,newOriginLocation);
+    copyOfOriginalTableState.splice(indexOfNewLocation,1,newLocationLocation);
+    debugger;
+    this.setState({tableRows: copyOfOriginalTableState});
+
+
+
+
+
+  }
 
   componentDidMount() {
     const buildTable = [];
+    let count =0
     for (let x = 0; x < 8; x++) {
+
       for (let y = 0; y < 8; y++) {
         if(x %2 === 0 && y %2 === 0){
             buildTable.push({
@@ -91,13 +157,14 @@ class App extends React.Component {
     copyOfNewTarget.peicePresent = "blackPeice";
     copyOfNewTarget.xPosition = newXPos;
     copyOfNewTarget.yPosition = newYPos;
-    debugger;
     copyOfNewTarget.element = <div onClick={()=> this.handleClick(newXPos,newYPos)} className={copyOFNewCell.element.props.className}><span className='blackPeice'> </span></div>
 
 
     copyOfTableState.splice(targetLocation,1,copyOfNewTarget);
 
     this.setState({tableRows: copyOfTableState})
+
+    this.ComputerMakeMove();
 
   }
 
