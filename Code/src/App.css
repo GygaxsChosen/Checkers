@@ -1,12 +1,76 @@
 .App {
   text-align: center;
 }
-
+html, body, #app, #app>div {
+  height: 100%
+}
 .highlighted{
   background-color: cyan;
-  opacity: 50%;
+  opacity: 100%;
 }
 
+.backGround{
+  background-color: sandybrown;
+  height: 100%;
+
+}
+.root{
+  height: 100%;
+}
+.fullScreen{
+  height: 100%;
+}
+
+.topBar{
+  position: absolute;
+  left: 303px;
+  border-style: solid;
+  border-color: black;
+  background-color: grey;
+  top: 0;
+  width: 76%;
+  z-index: 50;
+  height: 150px;
+}
+
+.leftBar{
+  position: absolute;
+  border-style: solid;
+  border-color: black;
+  background-color: grey;
+  top: 0;
+  left: 0;
+  width: 300px;
+  z-index: 50;
+  height: 100%;
+}
+.rightBar{
+  border-style: solid;
+  border-color: black;
+  background-color: grey;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  z-index: 50;
+  height: 100%;
+}
+.blackBanner{
+
+  text-align: right;
+  font-size: 22px;
+
+  padding-right: 5%;
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.redBanner{
+  font-size: 20px;
+  padding-left: 5%;
+}
 .redPeice {
   height: 20px;
   width: 20px;
@@ -27,20 +91,18 @@
   border:3px solid brown;
 }
 
-.mainScreen{
-  padding-left: 25%;
-  padding-right: 25%;
-
-
-  padding-top: 350px;
+body, html {
+  height: 100%;
 }
-
 .grid-container {
+  height: 50%;
+  padding-top: 15%;
+  width: 33%;
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto auto;
   grid-template-rows: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% ;
-  background-color: burlywood;
-  padding: 10px;
+  padding-left: 33%;
+
 }
 .redSquare {
 
