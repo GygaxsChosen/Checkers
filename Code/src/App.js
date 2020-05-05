@@ -65,12 +65,12 @@ class App extends React.Component {
                     if (landingSpace && landingSpace.peicePresent === false) {
                         validJump = true;
 
-                        setTimeout(async() => {
+                        setTimeout(async () => {
                             await this.newMovePeice(cell, landingSpace, true, true);
                         }, 1000)
                     }
                     return
-                } else if (rightMove&& rightMove.peicePresent === 'blackPeice') {
+                } else if (rightMove && rightMove.peicePresent === 'blackPeice') {
                     //look right for valid jump
                     let landingSpace = this.state.tableRows.find(row => row.xPosition === rightMove.xPosition + 1 && row.yPosition === rightMove.yPosition + 1);
 
@@ -78,8 +78,7 @@ class App extends React.Component {
                         validJump = true;
 
 
-
-                        setTimeout(async() => {
+                        setTimeout(async () => {
                             await this.newMovePeice(cell, landingSpace, true, true);
                         }, 1000)
                     }
@@ -88,27 +87,26 @@ class App extends React.Component {
 
             }
         })
-        if(!validJump){
-            const pieceToMove = this.state.tableRows.find((origin)=>{
+        if (!validJump) {
+            const pieceToMove = this.state.tableRows.find((origin) => {
 
-                if(origin.peicePresent === 'redPeice'){
+                if (origin.peicePresent === 'redPeice') {
 
-                    let rightMove = this.state.tableRows.find(cell => cell.xPosition === (origin.xPosition +1) && cell.yPosition === (origin.yPosition +1));
-                    let leftMove = this.state.tableRows.find(cell => cell.xPosition === (origin.xPosition +1) && cell.yPosition === (origin.yPosition -1));
+                    let rightMove = this.state.tableRows.find(cell => cell.xPosition === (origin.xPosition + 1) && cell.yPosition === (origin.yPosition + 1));
+                    let leftMove = this.state.tableRows.find(cell => cell.xPosition === (origin.xPosition + 1) && cell.yPosition === (origin.yPosition - 1));
 
 
-                    if(leftMove && leftMove.peicePresent ===false){
-                        validMove=leftMove;
-                    }else if (rightMove&& rightMove.peicePresent === false){
-                        validMove=rightMove;
+                    if (leftMove && leftMove.peicePresent === false) {
+                        validMove = leftMove;
+                    } else if (rightMove && rightMove.peicePresent === false) {
+                        validMove = rightMove;
                     }
 
                 }
-                if(validMove){
+                if (validMove) {
                     return origin;
                 }
             })
-
 
 
             setTimeout(() => {
@@ -122,7 +120,7 @@ class App extends React.Component {
 
     async newMovePeice(orginalLocation, newLocation, isAiMove = false, isJump) {
 
-        const {redPeicesTaken, BlackPeicesTaken} =this.state;
+        const {redPeicesTaken, BlackPeicesTaken} = this.state;
         const copyOfOriginalTableState = [...this.state.tableRows]
 
         const indexOfOriginalLocation = copyOfOriginalTableState.findIndex(cell => cell.xPosition === orginalLocation.xPosition && cell.yPosition === orginalLocation.yPosition);
@@ -149,21 +147,20 @@ class App extends React.Component {
 
             if (newOriginLocation.yPosition > newLocationLocation.yPosition) {
                 //left jump
-                if(!isAiMove){
+                if (!isAiMove) {
                     indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition - 1) && cell.yPosition === (orginalLocation.yPosition - 1));
-                }else{
+                } else {
                     indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition + 1) && cell.yPosition === (orginalLocation.yPosition - 1));
                 }
 
 
             } else {
                 //right jump
-                if(!isAiMove){
+                if (!isAiMove) {
                     indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition - 1) && cell.yPosition === (orginalLocation.yPosition + 1));
-                }else {
+                } else {
                     indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition + 1) && cell.yPosition === (orginalLocation.yPosition + 1));
                 }
-
 
 
             }
@@ -174,12 +171,12 @@ class App extends React.Component {
                                    className='blackSquare'></div>
             copyOfOriginalTableState.splice(indexOfPeiceToRemove, 1, newCell)
 
-            if(isAiMove){
-                this.setState({BlackPeicesTaken: BlackPeicesTaken +1})
+            if (isAiMove) {
+                this.setState({BlackPeicesTaken: BlackPeicesTaken + 1})
 
 
-            }else{
-                this.setState({redPeicesTaken: redPeicesTaken +1 })
+            } else {
+                this.setState({redPeicesTaken: redPeicesTaken + 1})
             }
         }
 
