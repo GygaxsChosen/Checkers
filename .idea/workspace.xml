@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03f8fad9-ec0b-4b72-90dd-13c3916b4ffb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/Code/src/App.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -56,8 +55,16 @@
       <updated>1585365067511</updated>
       <workItem from="1585365068560" duration="205000" />
       <workItem from="1596431055871" duration="4381000" />
-      <workItem from="1596777131300" duration="3204000" />
+      <workItem from="1596777131300" duration="3448000" />
     </task>
+    <task id="LOCAL-00001" summary="removes debuggers">
+      <created>1596780576059</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1596780576059</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -75,5 +82,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="adds css changes and new logic" />
+    <MESSAGE value="removes debuggers" />
+    <option name="LAST_COMMIT_MESSAGE" value="removes debuggers" />
   </component>
 </project>

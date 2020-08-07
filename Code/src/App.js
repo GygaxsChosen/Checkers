@@ -158,16 +158,18 @@ class App extends React.Component {
 
         newLocationLocation.peicePresent = orginalLocation.peicePresent;
 
-        if(!orginalLocation.isKing){
+        if (!orginalLocation.isKing) {
             newLocationLocation.element =
                 <div onClick={() => this.handleClick(newLocationLocation.xPosition, newLocationLocation.yPosition)}
-                     className={newLocation.element.props.className}><span className={orginalLocation.peicePresent}></span>
+                     className={newLocation.element.props.className}><span
+                    className={orginalLocation.peicePresent}></span>
                 </div>
-        }else{
-            newLocationLocation.isKing=true;
+        } else {
+            newLocationLocation.isKing = true;
             newLocationLocation.element =
                 <div onClick={() => this.handleClick(newLocationLocation.xPosition, newLocationLocation.yPosition)}
-                     className={newLocation.element.props.className}><span className={orginalLocation.peicePresent}>K</span>
+                     className={newLocation.element.props.className}><span
+                    className={orginalLocation.peicePresent}>K</span>
                 </div>
         }
 
@@ -209,7 +211,6 @@ class App extends React.Component {
                 this.setState({redPeicesTaken: redPeicesTaken + 1})
             }
         }
-        debugger;
         copyOfOriginalTableState.splice(indexOfOriginalLocation, 1, newOriginLocation);
 
         copyOfOriginalTableState.splice(indexOfNewLocation, 1, newLocationLocation);
@@ -367,14 +368,15 @@ class App extends React.Component {
         if (rightMove && rightMove.peicePresent === 'redPeice') {
             this.checkForJumpLeft(xPosition, yPosition, foundCell, 'right')
         }
-        debugger;
+
         if (foundCell.isKing) {
             const rearLeftMove = this.state.tableRows.find(cell => cell.xPosition === (xPosition + 1) && cell.yPosition === (yPosition - 1));
             const rearRightMove = this.state.tableRows.find(cell => cell.xPosition === (xPosition + 1) && cell.yPosition === (yPosition + 1));
 
-            if(rearLeftMove && rearLeftMove.peicePresent === false){
+            if (rearLeftMove && rearLeftMove.peicePresent === false) {
                 await this.highlightThisCell(rearLeftMove);
-            }if(rearRightMove && rearRightMove.peicePresent === false){
+            }
+            if (rearRightMove && rearRightMove.peicePresent === false) {
                 await this.highlightThisCell(rearRightMove);
             }
         }
