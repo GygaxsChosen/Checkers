@@ -1,12 +1,28 @@
 .App {
   text-align: center;
 }
-html, body, #app, #app>div {
+html, body, #app, #app> {
   height: 100%
 }
 .highlighted{
   background-color: cyan;
   opacity: 100%;
+}
+.rightBanner{
+  background-color: #1c68bf;
+  float: right;
+  min-width: calc(50vw - 320px);
+  max-width: calc(50vw - 320px);
+  min-height: 100vh;
+
+}
+.leftBanner{
+  background-color: #1c68bf;
+  float: left;
+  min-width: calc(50vw - 320px);
+  max-width: calc(50vw - 320px);
+  min-height: 100vh;
+
 }
 
 .backGround{
@@ -22,38 +38,44 @@ html, body, #app, #app>div {
 }
 
 .topBar{
+  min-height: calc(50vh - 320px);
   position: absolute;
-  left: 303px;
+  left: 10%;
   border-style: solid;
   border-color: black;
   background-color: grey;
   top: 0;
-  width: 76%;
+  width: 80%;
   z-index: 50;
-  height: 150px;
+
 }
 
-.leftBar{
-  position: absolute;
-  border-style: solid;
-  border-color: black;
-  background-color: grey;
-  top: 0;
-  left: 0;
-  width: 300px;
-  z-index: 50;
-  height: 100%;
+.leftText{
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 5%;
+width: 200px;
+  display: inline;
+  float: left;
+
 }
-.rightBar{
-  border-style: solid;
-  border-color: black;
-  background-color: grey;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 300px;
-  z-index: 50;
-  height: 100%;
+.rightText{
+  font-size: 20px;
+  font-weight: bold;
+  padding-right: 5%;
+  width: 200px;
+  display: inline;
+  text-align: right;
+  vertical-align: middle;
+  float: right;
+
+}
+
+.TopBanner{
+  height: calc(50vh - 320px);
+  padding: 1em 0;
+
+  background-color: sandybrown;
 }
 .blackBanner{
 
@@ -74,7 +96,6 @@ html, body, #app, #app>div {
 .redPeice {
   height: 20px;
   width: 20px;
-
   border-radius: 50%;
   display: inline-block;
   background-color:red;
@@ -84,28 +105,45 @@ html, body, #app, #app>div {
 .blackPeice{
   height: 20px;
   width: 20px;
-
   border-radius: 50%;
   display: inline-block;
-  background-color:grey;
-  border:3px solid brown;
+  background-color: grey;
+  border: 3px solid brown;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 body, html {
   height: 100%;
 }
+
+div{
+margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.playArea{
+  min-width: 640px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+
 .grid-container {
-  height: 50%;
-  padding-top: 15%;
-  width: 33%;
+  position: relative;
+
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto auto auto;
-  grid-template-rows: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% ;
-  padding-left: 33%;
+  min-width: 640px;
+  min-height: 640px;
+  grid-template-columns: 80px 80px 80px 80px 80px 80px 80px 80px;
+  grid-template-rows: 80px 80px 80px 80px 80px 80px 80px 80px ;
 
 }
 .redSquare {
-
+  min-width: 80px;
+  min-height: 80px;
   background-color: red;
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 20px;
@@ -114,6 +152,8 @@ body, html {
 }
 
 .blackSquare{
+  min-width: 80px;
+  min-height: 80px;
   background-color: black;
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 20px;
@@ -131,17 +171,6 @@ body, html {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {

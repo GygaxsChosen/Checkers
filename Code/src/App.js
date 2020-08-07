@@ -16,9 +16,30 @@ class App extends React.Component {
         this.lookForwardForValidMoves = this.lookForwardForValidMoves.bind(this);
         this.highlightThisCell = this.highlightThisCell.bind(this)
         this.clearHighlightedCells = this.clearHighlightedCells.bind(this);
+        this.checkForKinging = this.checkForKinging.bind(this);
         this.newMovePeice = this.newMovePeice.bind(this);
         this.ComputerMakeMove = this.ComputerMakeMove.bind(this);
         this.checkForJumpLeft = this.checkForJumpLeft.bind(this);
+    }
+
+    checkForKinging(newLocation) {
+        if (newLocation.xPosition === 0) {
+            // this represents a kingCondition
+            const copyOfTable = [...this.state.tableRows];
+
+            const king = copyOfTable.find(cell => cell.xPosition === newLocation.xPosition && cell.yPosition === newLocation.yPosition);
+            const indexOfPeiceToBeKing = copyOfTable.findIndex(cell => cell.xPosition === newLocation.xPosition && cell.yPosition === newLocation.yPosition);
+
+            king.isKing = true;
+
+            king.element = <div className={king.element.props.className}
+                                onClick={() => this.handleClick(newLocation.xPosition, newLocation.yPosition)}><span
+                className={king.element.props.children.props.className}>K</span></div>
+            copyOfTable.splice(indexOfPeiceToBeKing, 1, king);
+
+
+            this.setState({tableRows: copyOfTable});
+        }
     }
 
     async checkForJumpLeft(x, y, cell, direction) {
@@ -58,7 +79,7 @@ class App extends React.Component {
 
                 let leftMove = this.state.tableRows.find(row => row.xPosition === cell.xPosition + 1 && row.yPosition === cell.yPosition - 1);
                 let rightMove = this.state.tableRows.find(row => row.xPosition === cell.xPosition + 1 && row.yPosition === cell.yPosition + 1);
-                if (leftMove && leftMove.peicePresent === 'blackPeice') {
+                if (leftMove && leftMove.peicePresent === 'blackPeice' && validJump !== true) {
                     // look left for valid jump
                     let landingSpace = this.state.tableRows.find(row => row.xPosition === leftMove.xPosition + 1 && row.yPosition === leftMove.yPosition - 1);
 
@@ -70,7 +91,7 @@ class App extends React.Component {
                         }, 1000)
                     }
                     return
-                } else if (rightMove && rightMove.peicePresent === 'blackPeice') {
+                } else if (rightMove && rightMove.peicePresent === 'blackPeice' && validJump !== true) {
                     //look right for valid jump
                     let landingSpace = this.state.tableRows.find(row => row.xPosition === rightMove.xPosition + 1 && row.yPosition === rightMove.yPosition + 1);
 
@@ -128,6 +149,7 @@ class App extends React.Component {
 
         const newOriginLocation = {...copyOfOriginalTableState[indexOfOriginalLocation]};
         newOriginLocation.peicePresent = false;
+        newOriginLocation.isKing = false;
 
         newOriginLocation.element = <div className={orginalLocation.element.props.className}></div>
 
@@ -136,11 +158,19 @@ class App extends React.Component {
 
         newLocationLocation.peicePresent = orginalLocation.peicePresent;
 
+        if(!orginalLocation.isKing){
+            newLocationLocation.element =
+                <div onClick={() => this.handleClick(newLocationLocation.xPosition, newLocationLocation.yPosition)}
+                     className={newLocation.element.props.className}><span className={orginalLocation.peicePresent}></span>
+                </div>
+        }else{
+            newLocationLocation.isKing=true;
+            newLocationLocation.element =
+                <div onClick={() => this.handleClick(newLocationLocation.xPosition, newLocationLocation.yPosition)}
+                     className={newLocation.element.props.className}><span className={orginalLocation.peicePresent}>K</span>
+                </div>
+        }
 
-        newLocationLocation.element =
-            <div onClick={() => this.handleClick(newLocationLocation.xPosition, newLocationLocation.yPosition)}
-                 className={newLocation.element.props.className}><span className={orginalLocation.peicePresent}></span>
-            </div>
 
         if (isJump) {
             let indexOfPeiceToRemove = undefined;
@@ -179,12 +209,15 @@ class App extends React.Component {
                 this.setState({redPeicesTaken: redPeicesTaken + 1})
             }
         }
-
+        debugger;
         copyOfOriginalTableState.splice(indexOfOriginalLocation, 1, newOriginLocation);
+
         copyOfOriginalTableState.splice(indexOfNewLocation, 1, newLocationLocation);
 
         this.setState({tableRows: copyOfOriginalTableState});
 
+
+        this.checkForKinging(newLocation);
         if (isAiMove === false) {
             this.ComputerMakeMove();
         }
@@ -205,6 +238,7 @@ class App extends React.Component {
                         xPosition: x,
                         yPosition: y,
                         peicePresent: false,
+                        isKing: false,
                         element:
                             <div onClick={() => this.handleClick(x, y)} className='redSquare'></div>
                     })
@@ -216,6 +250,7 @@ class App extends React.Component {
                         xPosition: x,
                         yPosition: y,
                         peicePresent: false,
+                        isKing: false,
                         element: <div onClick={() => this.handleClick(x, y)} className='redSquare'></div>
                     })
                 } else if (x < 3) {
@@ -225,6 +260,7 @@ class App extends React.Component {
                         color: 'black',
                         yPosition: y,
                         peicePresent: 'redPeice',
+                        isKing: false,
                         element: <div className='blackSquare' onClick={() => this.handleClick(x, y)}><span
                             className='redPeice'></span></div>
                     })
@@ -235,6 +271,7 @@ class App extends React.Component {
                         color: 'black',
                         yPosition: y,
                         peicePresent: 'blackPeice',
+                        isKing: false,
                         element: <div className='blackSquare' onClick={() => this.handleClick(x, y)}><span
                             className='blackPeice'> </span></div>
                     })
@@ -330,12 +367,24 @@ class App extends React.Component {
         if (rightMove && rightMove.peicePresent === 'redPeice') {
             this.checkForJumpLeft(xPosition, yPosition, foundCell, 'right')
         }
+        debugger;
+        if (foundCell.isKing) {
+            const rearLeftMove = this.state.tableRows.find(cell => cell.xPosition === (xPosition + 1) && cell.yPosition === (yPosition - 1));
+            const rearRightMove = this.state.tableRows.find(cell => cell.xPosition === (xPosition + 1) && cell.yPosition === (yPosition + 1));
+
+            if(rearLeftMove && rearLeftMove.peicePresent === false){
+                await this.highlightThisCell(rearLeftMove);
+            }if(rearRightMove && rearRightMove.peicePresent === false){
+                await this.highlightThisCell(rearRightMove);
+            }
+        }
 
 
         this.setState({activePlayerPeice: foundCell})
     }
 
     async handleClick(xPosition, yPosition, isValidMove = false) {
+
         let isJump = false;
         let foundCell = this.state.tableRows.find(row => row.xPosition === xPosition && row.yPosition === yPosition);
         await this.clearHighlightedCells();
@@ -346,7 +395,7 @@ class App extends React.Component {
 
 
             isJump = true;
-            debugger;
+
         }
 
         if (isValidMove) {
@@ -357,40 +406,46 @@ class App extends React.Component {
 
                 this.lookForwardForValidMoves(xPosition, yPosition, foundCell);
             }
+
         }
 
 
     }
 
     render() {
-        return (
-            <div className="backGround">
-                <div className="leftBar"></div>
-                <div className="rightBar"></div>
-                <div className="topBar">
-                    <div className="container">
-                        <div>
-                            <p className='redBanner'>RED PIECES TAKEN </p>
-                            <p className='redBanner'> {this.state.redPeicesTaken}</p>
-                        </div>
-                        <div>
-                            <p className='blackBanner'>BLACK PIECES TAKEN </p>
-                            <p className='blackBanner'> {this.state.BlackPeicesTaken}</p>
-                        </div>
+        return (<div>
+                <div className="leftBanner">
 
+                </div>
+                <div className="rightBanner">
+
+                </div>
+
+                <div className="playArea">
+                    <div className="TopBanner">
+                        <div className="leftText">
+                            Red Pieces Taken
+                            <br/>
+                            <br/>
+                            {this.state.redPeicesTaken}
+                        </div>
+                        <div className="rightText">
+
+                            Black Pieces taken
+                            <br/>
+                            <br/>
+                            {this.state.BlackPeicesTaken}
+                        </div>
+                    </div>
+
+                    <div className="grid-container">
+                        {
+                            this.state.tableRows.map(item => item.element)
+                        }
 
                     </div>
 
-
                 </div>
-
-                <div className="grid-container">
-                    {
-                        this.state.tableRows.map(item => item.element)
-                    }
-
-                </div>
-
             </div>
 
 
