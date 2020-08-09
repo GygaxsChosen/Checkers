@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03f8fad9-ec0b-4b72-90dd-13c3916b4ffb" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Code/src/test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/Code/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/Code/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/Code/src/index.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -10,10 +14,17 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/Code" value="NewLocalChanges" />
+        <entry key="$PROJECT_DIR$/Code" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Code" />
@@ -55,7 +66,9 @@
       <updated>1585365067511</updated>
       <workItem from="1585365068560" duration="205000" />
       <workItem from="1596431055871" duration="4381000" />
-      <workItem from="1596777131300" duration="3448000" />
+      <workItem from="1596777131300" duration="4413000" />
+      <workItem from="1596850843229" duration="8947000" />
+      <workItem from="1596909455072" duration="5037000" />
     </task>
     <task id="LOCAL-00001" summary="removes debuggers">
       <created>1596780576059</created>

@@ -7,6 +7,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            humanHasDoublejump: false,
             tableRows: [],
             activeCell: {},
             redPeicesTaken: 0,
@@ -20,10 +21,14 @@ class App extends React.Component {
         this.newMovePeice = this.newMovePeice.bind(this);
         this.ComputerMakeMove = this.ComputerMakeMove.bind(this);
         this.checkForJumpLeft = this.checkForJumpLeft.bind(this);
+        this.logtableStateToConsole = this.logtableStateToConsole.bind(this);
+    }
+    logtableStateToConsole(){
+        console.log(this.state.tableRows);
     }
 
-    checkForKinging(newLocation) {
-        if (newLocation.xPosition === 0) {
+    checkForKinging(newLocation , isAIMove) {
+        if (!isAIMove && newLocation.xPosition === 0) {
             // this represents a kingCondition
             const copyOfTable = [...this.state.tableRows];
 
@@ -39,6 +44,10 @@ class App extends React.Component {
 
 
             this.setState({tableRows: copyOfTable});
+        }else if(isAIMove){
+            debugger;
+            const copyOfTable = [...this.state.tableRows];
+            const king = copyOfTable.find(cell => cell.xPosition === newLocation.xPosition && cell.yPosition === newLocation.yPosition);
         }
     }
 
@@ -61,6 +70,19 @@ class App extends React.Component {
                 validjump = true;
             }
 
+        }else if (direction === "backleft"){
+            jump = this.state.tableRows.find(cell => cell.xPosition === (x+2) && cell.yPosition === (y - 2));
+            if (jump && jump.peicePresent === false) {
+                validjump = true;
+
+            }
+
+        }else if(direction === "backright"){
+            jump = this.state.tableRows.find(cell => cell.xPosition === (x + 2) && cell.yPosition === (y + 2));
+            if (jump && jump.peicePresent === false) {
+                validjump = true;
+
+            }
         }
         if (validjump) {
             await this.highlightThisCell(jump)
@@ -140,6 +162,7 @@ class App extends React.Component {
     }
 
     async newMovePeice(orginalLocation, newLocation, isAiMove = false, isJump) {
+        let humanHasDoublejump= false
 
         const {redPeicesTaken, BlackPeicesTaken} = this.state;
         const copyOfOriginalTableState = [...this.state.tableRows]
@@ -177,31 +200,50 @@ class App extends React.Component {
         if (isJump) {
             let indexOfPeiceToRemove = undefined;
 
-            if (newOriginLocation.yPosition > newLocationLocation.yPosition) {
-                //left jump
-                if (!isAiMove) {
-                    indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition - 1) && cell.yPosition === (orginalLocation.yPosition - 1));
+                if (newOriginLocation.yPosition > newLocationLocation.yPosition) {
+                    //left jump
+                    if (!isAiMove) {
+                        indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition - 1) && cell.yPosition === (orginalLocation.yPosition - 1));
+                    } else {
+                        indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition + 1) && cell.yPosition === (orginalLocation.yPosition - 1));
+                    }
+
+
                 } else {
+                    //right jump
+                    if (!isAiMove) {
+                        indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition - 1) && cell.yPosition === (orginalLocation.yPosition + 1));
+                    } else {
+                        indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition + 1) && cell.yPosition === (orginalLocation.yPosition + 1));
+                    }
+
+
+                }
+                if(newLocationLocation.isKing){
+                if(this.state.activePlayerPeice && this.state.activePlayerPeice.isKing && newLocationLocation.xPosition - newOriginLocation.xPosition === 2 && orginalLocation.yPosition - newLocationLocation.yPosition === 2){
+                 //backleft capture
                     indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition + 1) && cell.yPosition === (orginalLocation.yPosition - 1));
+
                 }
 
-
-            } else {
-                //right jump
-                if (!isAiMove) {
-                    indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition - 1) && cell.yPosition === (orginalLocation.yPosition + 1));
-                } else {
+                if(this.state.activePlayerPeice && this.state.activePlayerPeice.isKing &&newLocationLocation.yPosition - newOriginLocation.yPosition === 2 && orginalLocation.xPosition - newLocationLocation.xPosition === -2){
+                    //backright capture
                     indexOfPeiceToRemove = this.state.tableRows.findIndex(cell => cell.xPosition === (orginalLocation.xPosition + 1) && cell.yPosition === (orginalLocation.yPosition + 1));
+
                 }
-
-
             }
+
+
+
+
+
             let newCell = copyOfOriginalTableState[indexOfPeiceToRemove];
             newCell.peicePresent = false;
-
+            newCell.isKing = false;
             newCell.element = <div onClick={() => this.handleClick(newCell.xPosition, newCell.yPosition)}
                                    className='blackSquare'></div>
             copyOfOriginalTableState.splice(indexOfPeiceToRemove, 1, newCell)
+
 
             if (isAiMove) {
                 this.setState({BlackPeicesTaken: BlackPeicesTaken + 1})
@@ -209,21 +251,46 @@ class App extends React.Component {
 
             } else {
                 this.setState({redPeicesTaken: redPeicesTaken + 1})
+
+                let rightMove = this.state.tableRows.find(cell => cell.xPosition === (newLocationLocation.xPosition - 1) && cell.yPosition === (newLocationLocation.yPosition + 1));
+                let leftMove =  this.state.tableRows.find(cell => cell.xPosition === (newLocationLocation.xPosition - 1) && cell.yPosition === (newLocationLocation.yPosition - 1));
+
+
+
+                if (leftMove && leftMove.peicePresent === 'redPeice') {
+
+                    let landingSpot =  this.state.tableRows.find(cell => cell.xPosition === (newLocationLocation.xPosition - 2) && cell.yPosition === (newLocationLocation.yPosition - 2));
+
+                    if(landingSpot&& landingSpot.peicePresent === false){
+                       humanHasDoublejump = true;
+                    }
+
+                }
+
+                if (rightMove && rightMove.peicePresent === 'redPeice') {
+                    let landingSpot = this.state.tableRows.find(cell => cell.xPosition === (newLocationLocation.xPosition - 2) && cell.yPosition === (newLocationLocation.yPosition + 2));
+
+                    if(landingSpot&& landingSpot.peicePresent === false){
+                        humanHasDoublejump = true;
+                    }
+                }
+                if(newLocationLocation.isking){
+
+                }
+
             }
         }
         copyOfOriginalTableState.splice(indexOfOriginalLocation, 1, newOriginLocation);
 
         copyOfOriginalTableState.splice(indexOfNewLocation, 1, newLocationLocation);
 
-        this.setState({tableRows: copyOfOriginalTableState});
+        this.setState({tableRows: copyOfOriginalTableState, humanHasDoublejump});
 
 
-        this.checkForKinging(newLocation);
-        if (isAiMove === false) {
+        this.checkForKinging(newLocation, isAiMove);
+        if (isAiMove === false && !humanHasDoublejump && !this.state.redPeicesTaken.length < 12) {
             this.ComputerMakeMove();
         }
-
-
     }
 
     componentDidMount() {
@@ -379,6 +446,14 @@ class App extends React.Component {
             if (rearRightMove && rearRightMove.peicePresent === false) {
                 await this.highlightThisCell(rearRightMove);
             }
+
+            if (rearLeftMove && rearLeftMove.peicePresent === 'redPeice') {
+                this.checkForJumpLeft(xPosition, yPosition, foundCell, 'backleft');
+            }
+
+            if (rearRightMove && rearRightMove.peicePresent === 'redPeice') {
+                this.checkForJumpLeft(xPosition, yPosition, foundCell, 'backright')
+            }
         }
 
 
@@ -392,7 +467,9 @@ class App extends React.Component {
         await this.clearHighlightedCells();
 
         if ((this.state.activePlayerPeice && this.state.activePlayerPeice.xPosition - xPosition === 2 && this.state.activePlayerPeice.yPosition - yPosition === 2) ||
-            (this.state.activePlayerPeice && this.state.activePlayerPeice.xPosition - xPosition === 2 && this.state.activePlayerPeice.yPosition - yPosition === -2)
+            (this.state.activePlayerPeice && this.state.activePlayerPeice.xPosition - xPosition === 2 && this.state.activePlayerPeice.yPosition - yPosition === -2)||
+            ((this.state.activePlayerPeice && this.state.activePlayerPeice.isKing && this.state.activePlayerPeice.xPosition - xPosition === -2 && this.state.activePlayerPeice.yPosition - yPosition === -2))||
+            ((this.state.activePlayerPeice && this.state.activePlayerPeice.isKing && this.state.activePlayerPeice.yPosition - yPosition === 2 && this.state.activePlayerPeice.xPosition - xPosition === -2))
         ) {
 
 
@@ -416,13 +493,6 @@ class App extends React.Component {
 
     render() {
         return (<div>
-                <div className="leftBanner">
-
-                </div>
-                <div className="rightBanner">
-
-                </div>
-
                 <div className="playArea">
                     <div className="TopBanner">
                         <div className="leftText">
@@ -433,7 +503,7 @@ class App extends React.Component {
                         </div>
                         <div className="rightText">
 
-                            Black Pieces taken
+                            Black Pieces Taken
                             <br/>
                             <br/>
                             {this.state.BlackPeicesTaken}
@@ -445,7 +515,10 @@ class App extends React.Component {
                             this.state.tableRows.map(item => item.element)
                         }
 
-                    </div>
+                    </div>{
+                    this.state.humanHasDoublejump &&
+                    <div className="doubleJumpNotice"> DOUBLE JUMP!</div>
+                }
 
                 </div>
             </div>
