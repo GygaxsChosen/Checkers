@@ -9,6 +9,7 @@ class App extends React.Component {
         this.state = {
             humanHasDoublejump: false,
             tableRows: [],
+            textToRender: '',
             activeCell: {},
             redPeicesTaken: 0,
             BlackPeicesTaken: 0
@@ -45,9 +46,20 @@ class App extends React.Component {
 
             this.setState({tableRows: copyOfTable});
         }else if(isAIMove){
-            debugger;
+
             const copyOfTable = [...this.state.tableRows];
-            const king = copyOfTable.find(cell => cell.xPosition === newLocation.xPosition && cell.yPosition === newLocation.yPosition);
+            const potenetialKing = copyOfTable.find(cell => cell.xPosition === newLocation.xPosition && cell.yPosition === newLocation.yPosition);
+            if (potenetialKing.xPosition === 7){
+                const indexOfPeiceToBeKing = copyOfTable.findIndex(cell => cell.xPosition === newLocation.xPosition && cell.yPosition === newLocation.yPosition);
+                debugger;
+                //valid AI king
+                potenetialKing.isKing = true;
+                potenetialKing.element = <div className={potenetialKing.element.props.className}
+                                              ><span
+                    className={potenetialKing.element.props.children.props.className}>K</span></div>
+                copyOfTable.splice(indexOfPeiceToBeKing, 1, potenetialKing);
+                this.setState({tableRows: copyOfTable});
+            }
         }
     }
 
@@ -144,6 +156,18 @@ class App extends React.Component {
                     } else if (rightMove && rightMove.peicePresent === false) {
                         validMove = rightMove;
                     }
+                    if(origin.isKing){
+                        debugger;
+                        let BackrightMove = this.state.tableRows.find(cell => cell.xPosition === (origin.xPosition -1) && cell.yPosition === (origin.yPosition + 1));
+
+                        let BackleftMove = this.state.tableRows.find(cell => cell.xPosition === (origin.xPosition -1) && cell.yPosition === (origin.yPosition - 1));
+                        if(BackrightMove && BackrightMove.peicePresent === false){
+                            validMove = BackrightMove
+                        }else if(BackleftMove && BackleftMove.peicePresent === false) {
+                            validMove = BackleftMove
+                        }
+                        debugger;
+                    }
 
                 }
                 if (validMove) {
@@ -153,7 +177,12 @@ class App extends React.Component {
 
 
             setTimeout(() => {
-                this.newMovePeice(pieceToMove, validMove, true)
+                if(pieceToMove){
+                    this.newMovePeice(pieceToMove, validMove, true)
+                }else{
+                    this.setState({ textToRender: "Computer Passes!"});
+                }
+
             }, 1000)
 
         }
@@ -284,7 +313,14 @@ class App extends React.Component {
 
         copyOfOriginalTableState.splice(indexOfNewLocation, 1, newLocationLocation);
 
-        this.setState({tableRows: copyOfOriginalTableState, humanHasDoublejump});
+            if(!isAiMove){
+                this.setState({tableRows: copyOfOriginalTableState, humanHasDoublejump, textToRender: false});
+            }
+            else {
+                this.setState({tableRows: copyOfOriginalTableState, humanHasDoublejump,})
+            }
+
+
 
 
         this.checkForKinging(newLocation, isAiMove);
@@ -517,8 +553,14 @@ class App extends React.Component {
 
                     </div>{
                     this.state.humanHasDoublejump &&
-                    <div className="doubleJumpNotice"> DOUBLE JUMP!</div>
+                    <div className="doubleJumpNotice">Double Jump!</div>
                 }
+                <div>
+                    {this.state.textToRender &&
+
+                    <div>{this.state.textToRender}</div>
+                    }
+                </div>
 
                 </div>
             </div>

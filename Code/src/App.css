@@ -112,12 +112,15 @@ width: 200px;
   padding-left: 5%;
 }
 .redPeice {
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  display: inline-block;
-  background-color:red;
-  border:3px solid brown;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: red;
+    border: 3px solid brown;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .blackPeice{
