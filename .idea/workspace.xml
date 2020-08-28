@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="03f8fad9-ec0b-4b72-90dd-13c3916b4ffb" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/Code/src/test" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/Code/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/Code/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/Code/src/index.css" afterDir="false" />
@@ -69,7 +68,7 @@
       <workItem from="1596777131300" duration="4413000" />
       <workItem from="1596850843229" duration="8947000" />
       <workItem from="1596909455072" duration="5677000" />
-      <workItem from="1598569346285" duration="3132000" />
+      <workItem from="1598569346285" duration="3381000" />
     </task>
     <task id="LOCAL-00001" summary="removes debuggers">
       <created>1596780576059</created>
